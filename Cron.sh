@@ -43,7 +43,7 @@ list_cron_jobs() {
   read -p "Enter user to view (blank = current): " user
   user=${user:-$(whoami)}
   echo ""
-  echo "📋 Current Cron Jobs for user [$user]:"
+  echo "Current Cron Jobs for user [$user]:"
   local jobs
   jobs=$(get_crontab "$user")
   if [[ -z "$jobs" ]]; then
@@ -57,7 +57,7 @@ list_cron_jobs() {
 
 add_cron_job() {
   echo ""
-  echo "➕ Add a new cron job"
+  echo "Add a new cron job"
   read -p "Enter user to execute as [default: $(whoami)]: " user
   [[ -z "$user" ]] && user=$(whoami)
 
@@ -87,14 +87,14 @@ add_cron_job() {
     4) schedule="@weekly" ;;
     5) schedule="@monthly" ;;
     6) schedule="@yearly" ;;
-    *) echo "❌ Cancelled."; return ;;
+    *) echo "Cancelled."; return ;;
   esac
 
   read -p "Enter the full command to run: " command
   echo ""
   if ! command -v "${command%% *}" &>/dev/null; then
     echo ""
-    echo "⚠️ Warning: '${command%% *}' not found. Proceed anyway? (y/n)"
+    echo "Warning: '${command%% *}' not found. Proceed anyway? (y/n)"
     read confirm
     [[ "$confirm" != "y" ]] && return
   fi
@@ -105,7 +105,7 @@ add_cron_job() {
   save_crontab "$user" "$CRONTEMP"
 
   echo ""
-  echo "✅ Cron job added for user [$user]."
+  echo "Cron job added for user [$user]."
 }
 
 delete_cron_job() {
@@ -121,7 +121,7 @@ delete_cron_job() {
   mv "${CRONTEMP}.tmp" "$CRONTEMP"
   save_crontab "$user" "$CRONTEMP"
   echo ""
-  echo "🗑️ Cron job #$job_number deleted."
+  echo "Cron job #$job_number deleted."
 }
 
 disable_cron_job() {
@@ -136,7 +136,7 @@ disable_cron_job() {
   sed -i "${job_number}s/^/#DISABLED: /" "$CRONTEMP"
   save_crontab "$user" "$CRONTEMP"
   echo ""
-  echo "🚫 Cron job #$job_number disabled."
+  echo "Cron job #$job_number disabled."
 }
 
 enable_cron_job() {
@@ -157,10 +157,10 @@ enable_cron_job() {
     sed -i "s|$disabled_line|$enabled_line|" "$CRONTEMP"
     save_crontab "$user" "$CRONTEMP"
     echo ""
-    echo "✅ Cron job #$job_number enabled."
+    echo "Cron job #$job_number enabled."
   else
     echo ""
-    echo "❌ Invalid job number."
+    echo "Invalid job number."
   fi
 }
 
@@ -174,7 +174,7 @@ while true; do
     3) delete_cron_job ;;
     4) disable_cron_job ;;
     5) enable_cron_job ;;
-    6) echo "👋 Goodbye!" ; exit ;;
-    *) echo "❌ Invalid option." ;;
+    6) echo "Goodbye!" ; exit ;;
+    *) echo "Invalid option." ;;
   esac
 done
